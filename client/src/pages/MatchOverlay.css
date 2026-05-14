@@ -1,0 +1,99 @@
+/* MatchOverlay.css */
+@font-face {
+  font-family: 'Retropix';
+  src: url('http://localhost:3001/resources/fonts/retropix.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Mokoto';
+  src: url('http://localhost:3001/resources/fonts/Mokoto Demo.ttf') format('truetype');
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+/* ============ Container ============ */
+.match-overlay-container {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+}
+
+.match-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* ============ Header ============ */
+.match-header {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 5;
+}
+
+.match-title {
+  font-family: 'Mokoto', 'Impact', sans-serif;
+  font-size: 72px;
+  color: white;
+  letter-spacing: 8px;
+  text-shadow:
+    0 0 20px rgba(247, 21, 171, 0.8),
+    0 0 40px rgba(247, 21, 171, 0.5);
+}
+
+.match-subtitle {
+  font-family: 'Retropix', monospace;
+  font-size: 48px;
+  color: #f715ab;
+  text-shadow: 0 0 15px rgba(247, 21, 171, 0.6);
+  font-style: italic;
+}
+
+/* ============ Current Song ============ */
+.match-current-song {
+  position: absolute;
+  top: 230px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 460px;
+  z-index: 5;
+}
+
+/* ============ Camera Areas ============ */
+.match-cameras {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 600px;
+  display: flex;
+  z-index: 3;
+}
+
+.match-cam-wrapper {
+  flex: 1;
+  position: relative;
+  padding: 20px;
+}
+
+.match-cam-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.match-divider {
+  width: 40px;
+  flex-shrink: 0;
+}

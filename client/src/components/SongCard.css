@@ -1,0 +1,204 @@
+/* SongCard.css */
+
+/* Custom fonts */
+@font-face {
+  font-family: 'Retropix';
+  src: url('http://localhost:3001/resources/fonts/retropix.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mokoto';
+  src: url('http://localhost:3001/resources/fonts/Mokoto Demo.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ============ Song Card Wrapper ============ */
+.song-card-wrapper {
+  position: relative;
+  /* The SVG viewBox is 1445.46 x 437.26, aspect ratio ~3.3:1 */
+  width: 100%;
+  aspect-ratio: 1445.46 / 437.26;
+  cursor: default;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.song-card-wrapper:hover {
+  transform: scale(1.02);
+}
+
+/* ============ SVG Frame (foreground overlay) ============ */
+.song-card-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.frame-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ============ Jacket Image ============ 
+ * Based on the design images:
+ * - The jacket is a square sitting INSIDE the colored frame border
+ * - There's visible colored padding/border around the jacket
+ * - In SVG coords (viewBox 1445.46 x 437.26):
+ *   The jacket square sits roughly at x:38, y:38, w:345, h:355
+ *   Percentages: left=2.6%, top=8.7%, width=23.9%, height=81.2%
+ */
+.song-card-jacket {
+  position: absolute;
+  left: 2.6%;
+  top: 9.5%;
+  width: 23.9%;
+  height: 81.2%;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.jacket-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ============ Top Colored Band ============
+ * This band sits on the colored (non-white) area of the SVG frame,
+ * above the white polygon. In SVG coords:
+ *   The colored strip runs from roughly x:423 to x:1360, y:71 to y:105
+ *   As percentages of 1445.46 x 437.26:
+ *     left: 29.3%, top: 16.4%, width: ~65%, height: ~7.6%
+ *   We need to account for the diagonal cuts.
+ *   The type icon sits left, difficulty label sits right.
+ */
+.song-card-top-band {
+  position: absolute;
+  /* Position over the colored header strip */
+  left: 30%;
+  top: 16.4%;
+  width: 65%;
+  height: 7.6%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4% 0 1%;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+/* Type icon (DX/STD) - inside top band, left side */
+.type-icon {
+  height: 110%;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  padding-bottom: 1.7em;
+}
+
+/* Difficulty label - inside top band, right side, white text */
+.difficulty-label {
+  font-family: 'Mokoto', 'Impact', sans-serif;
+  font-size: 1.6em;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #fff;
+  flex-shrink: 0;
+  padding-bottom: 5px;
+  padding-right: 5px;
+}
+
+/* ============ Song Info (on the white polygon area, below the top band) ============
+ * The white polygon body runs from roughly:
+ *   x: 423 to 1430, y: 105 to 368
+ * As percentages:
+ *   left: 29.3%, top: 24%, width: 69.7%, height: 60%
+ *
+ * Level is smaller, title is bigger as per reference.
+ */
+.song-card-info {
+  position: absolute;
+  left: 31%;
+  top: 25%;
+  width: 65%;
+  height: 58%;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 4%;
+  box-sizing: border-box;
+  pointer-events: none;
+  font-weight: bold;
+}
+
+/* Level - smaller text */
+.level-text {
+  font-family: 'Retropix', monospace;
+  font-size: 2.2em;
+
+  line-height: 1;
+  margin-bottom: 2%;
+  font-weight: bold;
+}
+
+/* Song title - larger text */
+.title-text {
+  font-family: 'Retropix', monospace;
+  font-size: 2.6em;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.1;
+}
+
+/* ============ Ban Overlay ============ */
+.ban-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: rgba(40, 40, 40, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ban-text {
+  font-family: 'Mokoto', 'Impact', sans-serif;
+  font-size: 3.5em;
+  color: #ff4757;
+  letter-spacing: 8px;
+  text-shadow: 0 0 20px rgba(255, 71, 87, 0.8);
+  transform: rotate(-12deg);
+  border: 5px solid #ff4757;
+  padding: 8px 24px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* ============ Banned state ============ */
+.song-card-wrapper.ban {
+  filter: grayscale(70%) brightness(0.55);
+}
+
+.song-card-wrapper.ban .ban-overlay {
+  filter: saturate(2) brightness(1.6);
+}
+
+/* ============ Picked state ============ */
+.song-card-wrapper.pick {
+  filter: drop-shadow(0 0 8px rgba(46, 213, 115, 0.6));
+}
+
+/* ============ Playing state (active on MatchOverlay) ============ */
+.song-card-wrapper.playing {
+  filter: drop-shadow(0 0 12px rgba(247, 21, 171, 0.8));
+}

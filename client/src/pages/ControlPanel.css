@@ -1,0 +1,360 @@
+/* ControlPanel.css — Dark futuristic admin theme */
+
+/* ============ Layout ============ */
+.cp-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 24px;
+  color: #aaa;
+  background: #0e0e1a;
+}
+
+.cp-container {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #0e0e1a 0%, #141428 50%, #1a1a35 100%);
+  color: #e0e0e0;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  padding: 24px 32px;
+  overflow-y: auto;
+}
+
+/* ============ Header ============ */
+.cp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cp-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+/* ============ Rows / Layout ============ */
+.cp-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.cp-row > * {
+  flex: 1;
+}
+
+/* ============ Card ============ */
+.cp-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 20px 24px;
+}
+
+.cp-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 12px;
+}
+
+.cp-card-desc {
+  font-size: 13px;
+  color: #888;
+  margin: 0 0 16px;
+}
+
+/* ============ Buttons ============ */
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn:hover { filter: brightness(1.15); }
+.btn:active { transform: scale(0.97); }
+
+.btn-danger {
+  background: #dc3545;
+  color: #fff;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: #fff;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ddd;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #bbb;
+  padding: 6px 14px;
+  font-size: 12px;
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.btn-playing {
+  background: linear-gradient(135deg, #f715ab, #c0119a);
+  color: #fff;
+  padding: 6px 14px;
+  font-size: 12px;
+  box-shadow: 0 0 12px rgba(247, 21, 171, 0.4);
+}
+
+.btn-sm {
+  border-radius: 6px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.btn-full {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+}
+
+/* ============ Inputs ============ */
+.cp-input {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: #e0e0e0;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.cp-input:focus {
+  border-color: rgba(247, 21, 171, 0.5);
+}
+
+.cp-input-score {
+  width: 70px;
+}
+
+.cp-select {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: #e0e0e0;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+.cp-select option {
+  background: #1a1a35;
+  color: #e0e0e0;
+}
+
+/* ============ Preset Add ============ */
+.cp-preset-add {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.cp-preset-add .cp-input {
+  flex: 1;
+}
+
+/* ============ Players Row ============ */
+.cp-players-row {
+  display: flex;
+  gap: 16px;
+}
+
+.cp-player-col {
+  flex: 1;
+}
+
+.cp-player-label {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+.cp-player-label.p1 { color: #ff4757; }
+.cp-player-label.p2 { color: #4da6ff; }
+
+.cp-score-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cp-score-row label {
+  font-size: 13px;
+  color: #888;
+}
+
+/* ============ Level Row ============ */
+.cp-level-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.cp-level-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cp-level-field label {
+  font-size: 12px;
+  color: #888;
+}
+
+.cp-level-field .cp-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ============ Status Bar ============ */
+.cp-status-bar {
+  margin-top: 16px;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cp-status-label {
+  font-size: 13px;
+  color: #888;
+}
+
+.cp-status-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cp-status-value.turn-1 { color: #ff4757; }
+.cp-status-value.turn-2 { color: #4da6ff; }
+.cp-status-value.turn-0 { color: #2ed573; }
+
+/* ============ Slots Section ============ */
+.cp-slots-section {
+  margin-bottom: 32px;
+}
+
+.cp-slots-grid {
+  display: flex;
+  gap: 14px;
+}
+
+.cp-slot {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 220px;
+  transition: all 0.3s;
+}
+
+.cp-slot.ban {
+  border-color: rgba(220, 53, 69, 0.3);
+  opacity: 0.5;
+}
+
+.cp-slot.pick {
+  border-color: rgba(46, 213, 115, 0.3);
+}
+
+.cp-slot.playing {
+  border-color: rgba(247, 21, 171, 0.6);
+  box-shadow: 0 0 20px rgba(247, 21, 171, 0.15);
+  background: rgba(247, 21, 171, 0.05);
+}
+
+.cp-slot-header {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.cp-slot-img {
+  width: 80%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.cp-slot.ban .cp-slot-img {
+  filter: grayscale(100%) brightness(40%);
+}
+
+.cp-slot-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ddd;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.cp-slot-meta {
+  font-size: 11px;
+  color: #888;
+  margin-top: 2px;
+}
+
+.cp-slot-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-top: 6px;
+}
+
+.cp-slot-badge.ban {
+  background: rgba(220, 53, 69, 0.2);
+  color: #ff4757;
+  border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.cp-slot-badge.pick {
+  background: rgba(46, 213, 115, 0.2);
+  color: #2ed573;
+  border: 1px solid rgba(46, 213, 115, 0.3);
+}
+
+.cp-slot-empty {
+  margin: auto;
+  font-size: 14px;
+  color: #555;
+}

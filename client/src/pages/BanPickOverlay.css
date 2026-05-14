@@ -1,0 +1,106 @@
+/* BanPickOverlay.css */
+@font-face {
+  font-family: 'Retropix';
+  src: url('http://localhost:3001/resources/fonts/retropix.otf') format('opentype');
+}
+@font-face {
+  font-family: 'Mokoto';
+  src: url('http://localhost:3001/resources/fonts/Mokoto Demo.ttf') format('truetype');
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+}
+
+/* ============ Canvas ============ */
+.overlay-canvas {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+}
+
+.overlay-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* ============ Song Cards Column (left side) ============ */
+.song-cards-column {
+  position: absolute;
+  left: 60px;
+  top: 80px;
+  width: 520px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.song-card-slot {
+  width: 100%;
+}
+
+.empty-slot-overlay {
+  width: 100%;
+  aspect-ratio: 1445.46 / 437.26;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Retropix', monospace;
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.3);
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+}
+
+/* ============ Camera Frame (right side) ============ */
+.camera-frame-area {
+  position: absolute;
+  /* Based on the design: camera area is roughly right-center */
+  right: 40px;
+  top: 80px;
+  width: 820px;
+  height: 620px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.camera-frame-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ============ Player Name Boxes ============ */
+.player-box {
+  position: absolute;
+  bottom: 50px;
+  width: 300px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Retropix', monospace;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 5;
+  border-radius: 4px;
+}
+
+.player-box-1 {
+  right: 560px;
+}
+
+.player-box-2 {
+  right: 100px;
+}
