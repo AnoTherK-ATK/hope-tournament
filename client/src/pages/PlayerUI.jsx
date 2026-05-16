@@ -3,7 +3,7 @@ import { socket } from '../lib/socket';
 import SongCard from '../components/SongCard';
 import './PlayerUI.css';
 
-const SERVER = 'http://localhost:3001';
+const SERVER = '';
 
 export default function PlayerUI() {
   const [state, setState] = useState(null);
@@ -26,18 +26,15 @@ export default function PlayerUI() {
   if (!state) return <div className="player-loading">Loading...</div>;
 
   const handleBan = (slotId) => {
-    if (state.turn === 1 || state.turn === 2) {
+    if (state.revealed && (state.turn === 1 || state.turn === 2)) {
       socket.emit('ban_slot', { slotId, playerId: state.turn });
     }
   };
 
-  const getTurnMessage = () => {
-    if (state.turn === 1) return `${state.player1.name} - Chọn 1 bài để BAN`;
-    if (state.turn === 2) return `${state.player2.name} - Chọn 1 bài để BAN`;
-    return "BAN xong! Sẵn sàng thi đấu.";
-  };
+
 
   const hasSongs = state.slots.some(s => s.song);
+  const canShowSongs = hasSongs && state.revealed;
 
   return (
     <div className="player-ui-container">
@@ -49,16 +46,8 @@ export default function PlayerUI() {
         draggable={false}
       />
 
-      {/* Header */}
-      <div className="player-ui-header">
-        <h1 className="player-ui-title">BAN 2 TRACKS</h1>
-        <div className={`turn-indicator turn-${state.turn === 1 ? 'p1' : state.turn === 2 ? 'p2' : 'done'}`}>
-          {getTurnMessage()}
-        </div>
-      </div>
-
-      {/* Song Cards Grid */}
-      {hasSongs ? (
+      
+      {canShowSongs ? (
         <div className="player-cards-grid">
           {/* Row 1: 2 cards */}
           <div className="player-cards-row">
@@ -119,7 +108,7 @@ export default function PlayerUI() {
         </div>
       ) : (
         <div className="waiting-message">
-          Đang chờ Admin random bài hát...
+          {hasSongs ? 'Đang chờ Admin reveal bài hát...' : 'Đang chờ Admin random bài hát...'}
         </div>
       )}
     </div>

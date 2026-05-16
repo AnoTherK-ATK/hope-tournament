@@ -1,7 +1,7 @@
 import React from 'react';
 import './SongCard.css';
 
-const SERVER = 'http://localhost:3001';
+const SERVER = '';
 
 // Map difficulty to SVG frame file
 const DIFFICULTY_SVG = {

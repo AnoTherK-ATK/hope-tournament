@@ -1,3 +1,38 @@
+@font-face {
+  font-family: 'Retropix';
+  src: url('/resources/fonts/retropix.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mokoto';
+  src: url('/resources/fonts/Mokoto.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Reesha";
+  src: url("/resources/fonts/Reesha.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "VT323";
+  src: url("/resources/fonts/VT323.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Neoneon";
+  src: url("/resources/fonts/Neoneon.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
 body, html {
   margin: 0;
   padding: 0;

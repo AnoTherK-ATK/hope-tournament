@@ -1,0 +1,35 @@
+.player-camera-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1285 / 725;
+  max-height: 100%;
+  margin: auto;
+}
+
+.camera-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.camera-player-name {
+  position: absolute;
+  right: 0.2%;
+  top: 0.3%;
+  width: 34%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Retropix', monospace;
+  font-size: 32px;
+  color: #fff;
+  z-index: 2;
+  text-shadow: 2px 2px 0px #f715ab;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
