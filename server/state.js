@@ -12,16 +12,29 @@ try {
   console.error("Error loading data.json", error);
 }
 
-const presetPlayers = [
-  "Player 1", "Player 2", "Kuro", "Shiro", "Rin", "Len", "Miku", "Luka"
-];
+let playersData = { upper: [], under: [] };
+const playersPath = path.join(__dirname, '../resources/players.json');
+try {
+  if (fs.existsSync(playersPath)) {
+    const rawPlayers = fs.readFileSync(playersPath, 'utf8');
+    playersData = JSON.parse(rawPlayers);
+  } else {
+    // Write default if not exists
+    playersData = { upper: ["Player 1", "Player 2"], under: ["Player 3", "Player 4"] };
+    fs.writeFileSync(playersPath, JSON.stringify(playersData, null, 2), 'utf8');
+  }
+} catch (error) {
+  console.error("Error loading players.json", error);
+}
 
 const state = {
   player1: { name: "Player 1", score: 0 },
   player2: { name: "Player 2", score: 0 },
-  presetPlayers: presetPlayers,
+  players: playersData,
+  match: { type: "Quarter Final", bracket: "Upper" },
   turn: 1, // 1 for P1 ban, 2 for P2 ban, 0 for DONE
   currentPlaying: null, // slotId of the song currently being played on MatchOverlay
+  revealed: false, // Songs are hidden until admin reveals them
   slots: [
     { id: 0, song: null, action: null, by: null },
     { id: 1, song: null, action: null, by: null },
@@ -45,13 +58,12 @@ function updateScore(p1Score, p2Score) {
   state.player2.score = p2Score;
 }
 
-function addPresetPlayer(name) {
-  if (!state.presetPlayers.includes(name)) {
-    state.presetPlayers.push(name);
-  }
+function updateMatchInfo(type, bracket) {
+  state.match.type = type;
+  state.match.bracket = bracket;
 }
 
-function randomizeSongs(minLvl, maxLvl) {
+function randomizeSongs(minLvl, maxLvl, count = 5) {
   // Build a list of { song, sheet } pairs where the sheet matches the level filter
   const validPairs = [];
   const seenSongs = new Set();
@@ -69,11 +81,11 @@ function randomizeSongs(minLvl, maxLvl) {
     });
   });
 
-  if (validPairs.length < 5) return false;
+  if (validPairs.length < count) return false;
 
-  // Shuffle and pick 5
+  // Shuffle and pick `count` songs
   const shuffled = validPairs.sort(() => 0.5 - Math.random());
-  const selected = shuffled.slice(0, 5);
+  const selected = shuffled.slice(0, count);
 
   state.slots = selected.map((pair, idx) => ({
     id: idx,
@@ -84,6 +96,8 @@ function randomizeSongs(minLvl, maxLvl) {
   }));
 
   state.turn = 1; // Reset turn to Player 1
+  state.currentPlaying = null;
+  state.revealed = false;
   return true;
 }
 
@@ -123,7 +137,54 @@ function resetMatch() {
   state.player2.score = 0;
   state.turn = 1;
   state.currentPlaying = null;
+  state.revealed = false;
   state.slots = state.slots.map(s => ({ id: s.id, song: null, action: null, by: null }));
+}
+
+function resetBanPick() {
+  state.turn = 1;
+  state.currentPlaying = null;
+  state.revealed = false;
+  state.slots = state.slots.map(s => ({
+    ...s,
+    action: null,
+    by: null
+  }));
+}
+
+function revealSongs() {
+  state.revealed = true;
+}
+
+function addSongToSlot(songId, sheetType, sheetDifficulty) {
+  // Find the song
+  const song = songData.find(s => s.songId === songId);
+  if (!song) return false;
+
+  // Find the specific sheet
+  const sheet = song.sheets.find(
+    s => s.type === sheetType && s.difficulty === sheetDifficulty
+  );
+  if (!sheet) return false;
+
+  // Find the first empty slot or append a new one
+  const emptySlot = state.slots.find(s => !s.song);
+  if (emptySlot) {
+    emptySlot.song = song;
+    emptySlot.sheet = sheet;
+    emptySlot.action = null;
+    emptySlot.by = null;
+  } else {
+    // Add a new slot
+    state.slots.push({
+      id: state.slots.length,
+      song: song,
+      sheet: sheet,
+      action: null,
+      by: null
+    });
+  }
+  return true;
 }
 
 module.exports = {
@@ -131,9 +192,12 @@ module.exports = {
   getState,
   updatePlayers,
   updateScore,
-  addPresetPlayer,
+  updateMatchInfo,
   randomizeSongs,
   banSlot,
   setCurrentPlaying,
-  resetMatch
+  resetMatch,
+  resetBanPick,
+  addSongToSlot,
+  revealSongs
 };

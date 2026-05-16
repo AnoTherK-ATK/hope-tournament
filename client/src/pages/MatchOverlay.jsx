@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { socket } from '../lib/socket';
 import SongCard from '../components/SongCard';
+import MatchHeader from '../components/MatchHeader';
+import PlayerCamera from '../components/PlayerCamera';
 import './MatchOverlay.css';
 
-const SERVER = 'http://localhost:3001';
+const SERVER = '';
 
 export default function MatchOverlay() {
   const [state, setState] = useState(null);
@@ -39,11 +41,8 @@ export default function MatchOverlay() {
         draggable={false}
       />
 
-      {/* Header title area */}
-      <div className="match-header">
-        <div className="match-title">QUARTER FINAL</div>
-        <div className="match-subtitle">Under</div>
-      </div>
+      {/* Match Header */}
+      <MatchHeader match={state.match} />
 
       {/* Current Song Card (centered, between header and cameras) */}
       {currentSong && currentSong.song && (
@@ -60,12 +59,7 @@ export default function MatchOverlay() {
       <div className="match-cameras">
         {/* Left camera (Player 1) */}
         <div className="match-cam-wrapper">
-          <img
-            src={`${SERVER}/resources/design/camera-frame.svg`}
-            alt="camera frame"
-            className="match-cam-svg"
-            draggable={false}
-          />
+          <PlayerCamera playerName={state.player1?.name} />
         </div>
 
         {/* Center divider area (transparent, the background shows through) */}
@@ -73,12 +67,7 @@ export default function MatchOverlay() {
 
         {/* Right camera (Player 2) */}
         <div className="match-cam-wrapper">
-          <img
-            src={`${SERVER}/resources/design/camera-frame.svg`}
-            alt="camera frame"
-            className="match-cam-svg"
-            draggable={false}
-          />
+          <PlayerCamera playerName={state.player2?.name} />
         </div>
       </div>
     </div>

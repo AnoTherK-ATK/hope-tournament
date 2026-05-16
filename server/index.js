@@ -43,14 +43,14 @@ io.on('connection', (socket) => {
     io.emit('state_updated', stateManager.getState());
   });
 
-  socket.on('add_preset_player', (name) => {
-    stateManager.addPresetPlayer(name);
+  socket.on('update_match_info', (data) => {
+    stateManager.updateMatchInfo(data.type, data.bracket);
     io.emit('state_updated', stateManager.getState());
   });
 
   socket.on('randomize_songs', (data) => {
-    // data = { minLvl, maxLvl }
-    stateManager.randomizeSongs(data.minLvl, data.maxLvl);
+    // data = { minLvl, maxLvl, count }
+    stateManager.randomizeSongs(data.minLvl, data.maxLvl, data.count || 5);
     io.emit('state_updated', stateManager.getState());
   });
 
@@ -70,12 +70,29 @@ io.on('connection', (socket) => {
     io.emit('state_updated', stateManager.getState());
   });
 
+  socket.on('reset_ban_pick', () => {
+    stateManager.resetBanPick();
+    io.emit('state_updated', stateManager.getState());
+  });
+
+  socket.on('reveal_songs', () => {
+    stateManager.revealSongs();
+    io.emit('state_updated', stateManager.getState());
+  });
+
+  socket.on('add_song_to_slot', (data) => {
+    // data = { songId, sheetType, sheetDifficulty }
+    stateManager.addSongToSlot(data.songId, data.sheetType, data.sheetDifficulty);
+    io.emit('state_updated', stateManager.getState());
+  });
+
   socket.on('disconnect', () => {
     console.log('Client disconnected:', socket.id);
   });
 });
 
 const PORT = 3001;
-server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT}`);
+  console.log(`Accessible on local network (LAN)`);
 });

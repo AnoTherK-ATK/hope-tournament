@@ -1,12 +1,3 @@
-/* PlayerUI.css */
-@font-face {
-  font-family: 'Retropix';
-  src: url('http://localhost:3001/resources/fonts/retropix.otf') format('opentype');
-}
-@font-face {
-  font-family: 'Mokoto';
-  src: url('http://localhost:3001/resources/fonts/Mokoto Demo.ttf') format('truetype');
-}
 
 body {
   margin: 0;
@@ -28,12 +19,15 @@ body {
 .player-ui-container {
   position: relative;
   width: 100vw;
-  min-height: 100vh;
+  height: 100vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  
 }
 
 .player-ui-bg {
-  position: fixed;
+  position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
@@ -46,25 +40,26 @@ body {
   position: relative;
   z-index: 5;
   text-align: center;
-  padding: 40px 20px 20px;
+  padding: 2vh 2vw;
+  flex-shrink: 0;
 }
 
 .player-ui-title {
   font-family: 'Mokoto', 'Impact', sans-serif;
-  font-size: 64px;
+  font-size: clamp(32px, 5vw, 64px);
   color: white;
   text-shadow:
     0 0 20px rgba(247, 21, 171, 0.8),
     0 0 40px rgba(247, 21, 171, 0.5);
   letter-spacing: 8px;
-  margin: 0 0 20px;
+  margin: 0 0 1vh;
 }
 
 .turn-indicator {
   display: inline-block;
   font-family: 'Retropix', monospace;
-  font-size: 32px;
-  padding: 12px 40px;
+  font-size: clamp(16px, 2.5vw, 32px);
+  padding: 1vh 3vw;
   border-radius: 12px;
   color: white;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
@@ -85,30 +80,38 @@ body {
   box-shadow: 0 0 20px rgba(46, 213, 115, 0.5);
 }
 
+.turn-waiting {
+  background: linear-gradient(135deg, #636e72, #2d3436);
+  box-shadow: 0 0 20px rgba(99, 110, 114, 0.4);
+}
+
 /* ============ Cards Grid ============ */
 .player-cards-grid {
   position: relative;
   z-index: 5;
-  padding: 30px 80px 60px;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  justify-content: center;
+  gap: 3vh;
+  padding: 0 4vw 4vh;
+  box-sizing: border-box;
 }
 
 .player-cards-row {
   display: flex;
   justify-content: center;
-  gap: 64px;
+  gap: 4vw;
+  width: 100%;
 }
 
 .player-card-item {
   width: 45%;
-  max-width: 540px;
+  max-width: 600px;
 }
 
 .center-row .player-card-item {
-  width: 40%;
-  max-width: 480px;
+  width: 45%;
 }
 
 /* Make clickable cards interactive */
@@ -131,7 +134,10 @@ body {
   z-index: 5;
   text-align: center;
   font-family: 'Retropix', monospace;
-  font-size: 36px;
+  font-size: clamp(24px, 4vw, 36px);
   color: rgba(255, 255, 255, 0.5);
-  padding: 200px 20px;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
