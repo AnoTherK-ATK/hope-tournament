@@ -27,6 +27,11 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
 
+  // Set callback for hot reloads
+  stateManager.setOnStateChange((newState) => {
+    io.emit('state_updated', newState);
+  });
+
   // Send initial state and songs
   socket.emit('init_data', {
     state: stateManager.getState(),
@@ -83,6 +88,16 @@ io.on('connection', (socket) => {
   socket.on('add_song_to_slot', (data) => {
     // data = { songId, sheetType, sheetDifficulty }
     stateManager.addSongToSlot(data.songId, data.sheetType, data.sheetDifficulty);
+    io.emit('state_updated', stateManager.getState());
+  });
+
+  socket.on('update_bracket_match', (data) => {
+    stateManager.updateBracketMatch(data.id, data);
+    io.emit('state_updated', stateManager.getState());
+  });
+
+  socket.on('randomize_bracket', (source) => {
+    stateManager.randomizeBracket(source);
     io.emit('state_updated', stateManager.getState());
   });
 

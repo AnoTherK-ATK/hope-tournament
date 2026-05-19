@@ -27,6 +27,26 @@ try {
   console.error("Error loading players.json", error);
 }
 
+let onStateChangeCallback = null;
+function setOnStateChange(cb) {
+  onStateChangeCallback = cb;
+}
+
+// Watch players.json for real-time updates
+fs.watchFile(playersPath, { interval: 1000 }, (curr, prev) => {
+  try {
+    const rawPlayers = fs.readFileSync(playersPath, 'utf8');
+    const newPlayersData = JSON.parse(rawPlayers);
+    state.players = newPlayersData;
+    console.log("players.json reloaded in real time");
+    if (onStateChangeCallback) {
+      onStateChangeCallback(state);
+    }
+  } catch (error) {
+    console.error("Error reloading players.json on change", error);
+  }
+});
+
 const state = {
   player1: { name: "Player 1", score: 0 },
   player2: { name: "Player 2", score: 0 },
@@ -41,6 +61,15 @@ const state = {
     { id: 2, song: null, action: null, by: null },
     { id: 3, song: null, action: null, by: null },
     { id: 4, song: null, action: null, by: null },
+  ],
+  bracket: [
+    { id: 1, p1: "Player 1", p2: "Player 2", winner: null },
+    { id: 2, p1: "Player 3", p2: "Player 4", winner: null },
+    { id: 3, p1: "Player 5", p2: "Player 6", winner: null },
+    { id: 4, p1: "Player 7", p2: "Player 8", winner: null },
+    { id: 5, p1: "", p2: "", winner: null },
+    { id: 6, p1: "", p2: "", winner: null },
+    { id: 7, p1: "", p2: "", winner: null },
   ]
 };
 
@@ -187,6 +216,80 @@ function addSongToSlot(songId, sheetType, sheetDifficulty) {
   return true;
 }
 
+const nextMatchMap = {
+  1: { nextId: 5, slot: 'p1' },
+  2: { nextId: 5, slot: 'p2' },
+  3: { nextId: 6, slot: 'p1' },
+  4: { nextId: 6, slot: 'p2' },
+  5: { nextId: 7, slot: 'p1' },
+  6: { nextId: 7, slot: 'p2' },
+};
+
+function advanceWinner(id) {
+  const nextInfo = nextMatchMap[id];
+  if (!nextInfo) return;
+
+  const currentMatch = state.bracket.find(m => m.id === id);
+  const nextMatch = state.bracket.find(m => m.id === nextInfo.nextId);
+
+  if (currentMatch && nextMatch) {
+    let winnerName = "";
+    if (currentMatch.winner === 'p1') {
+      winnerName = currentMatch.p1;
+    } else if (currentMatch.winner === 'p2') {
+      winnerName = currentMatch.p2;
+    }
+
+    const prevPlayerName = nextMatch[nextInfo.slot];
+    if (prevPlayerName !== winnerName) {
+      nextMatch[nextInfo.slot] = winnerName;
+      nextMatch.winner = null;
+      // Recursively advance/reset downstream matches
+      advanceWinner(nextInfo.nextId);
+    }
+  }
+}
+
+function updateBracketMatch(id, data) {
+  const match = state.bracket.find(m => m.id === id);
+  if (match) {
+    if (data.p1 !== undefined) match.p1 = data.p1;
+    if (data.p2 !== undefined) match.p2 = data.p2;
+    if (data.winner !== undefined) match.winner = data.winner;
+    
+    // Automatically advance/propagate winner to the next round
+    advanceWinner(id);
+  }
+}
+
+function randomizeBracket(source) {
+  let pool = [];
+  if (source === 'upper') {
+    pool = [...(state.players.upper || [])];
+  } else if (source === 'under') {
+    pool = [...(state.players.under || [])];
+  } else {
+    pool = [...(state.players.upper || []), ...(state.players.under || [])];
+  }
+
+  // Shuffle
+  pool.sort(() => 0.5 - Math.random());
+
+  // Assign to QF
+  for (let i = 0; i < 4; i++) {
+    state.bracket[i].p1 = pool[i * 2] || "";
+    state.bracket[i].p2 = pool[i * 2 + 1] || "";
+    state.bracket[i].winner = null;
+  }
+
+  // Clear SF and GF
+  for (let i = 4; i < 7; i++) {
+    state.bracket[i].p1 = "";
+    state.bracket[i].p2 = "";
+    state.bracket[i].winner = null;
+  }
+}
+
 module.exports = {
   songData,
   getState,
@@ -199,5 +302,8 @@ module.exports = {
   resetMatch,
   resetBanPick,
   addSongToSlot,
-  revealSongs
+  revealSongs,
+  updateBracketMatch,
+  randomizeBracket,
+  setOnStateChange
 };

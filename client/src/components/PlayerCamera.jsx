@@ -1,24 +1,35 @@
 import React from 'react';
-import './PlayerCamera.css';
+import styles from './PlayerCamera.module.css';
+
+const cx = (...classes) => {
+  return classes
+    .flat()
+    .filter(Boolean)
+    .join(' ')
+    .split(' ')
+    .filter(Boolean)
+    .map(c => styles[c] || c)
+    .join(' ');
+};
 
 const SERVER = '';
 
 export default function PlayerCamera({ playerName }) {
   return (
-    <div className="player-camera-container">
+    <div className={cx("player-camera-container")}>
       {/* <img
         src={`${SERVER}/resources/design/camera-body.svg`}
         alt="camera body"
-        className="camera-layer"
+        className={cx("camera-layer")}
         draggable={false}
       /> */}
       <img
         src={`${SERVER}/resources/design/camera-header.svg`}
         alt="camera header"
-        className="camera-layer"
+        className={cx("camera-layer")}
         draggable={false}
       />
-      <div className="camera-player-name">
+      <div className={cx("camera-player-name")}>
         {playerName}
       </div>
     </div>

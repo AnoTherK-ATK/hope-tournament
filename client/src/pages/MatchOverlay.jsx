@@ -3,7 +3,18 @@ import { socket } from '../lib/socket';
 import SongCard from '../components/SongCard';
 import MatchHeader from '../components/MatchHeader';
 import PlayerCamera from '../components/PlayerCamera';
-import './MatchOverlay.css';
+import styles from './MatchOverlay.module.css';
+
+const cx = (...classes) => {
+  return classes
+    .flat()
+    .filter(Boolean)
+    .join(' ')
+    .split(' ')
+    .filter(Boolean)
+    .map(c => styles[c] || c)
+    .join(' ');
+};
 
 const SERVER = '';
 
@@ -32,12 +43,12 @@ export default function MatchOverlay() {
   const currentSong = playingSlot?.action === 'pick' ? playingSlot : null;
 
   return (
-    <div className="match-overlay-container">
+    <div className={cx("match-overlay-container")}>
       {/* Background */}
       <img
         src={`${SERVER}/resources/design/background.png`}
         alt="bg"
-        className="match-bg"
+        className={cx("match-bg")}
         draggable={false}
       />
 
@@ -46,7 +57,7 @@ export default function MatchOverlay() {
 
       {/* Current Song Card (centered, between header and cameras) */}
       {currentSong && currentSong.song && (
-        <div className="match-current-song">
+        <div className={cx("match-current-song")}>
           <SongCard
             song={currentSong.song}
             sheet={currentSong.sheet}
@@ -56,17 +67,17 @@ export default function MatchOverlay() {
       )}
 
       {/* Two camera frames side by side */}
-      <div className="match-cameras">
+      <div className={cx("match-cameras")}>
         {/* Left camera (Player 1) */}
-        <div className="match-cam-wrapper">
+        <div className={cx("match-cam-wrapper")}>
           <PlayerCamera playerName={state.player1?.name} />
         </div>
 
         {/* Center divider area (transparent, the background shows through) */}
-        <div className="match-divider"></div>
+        <div className={cx("match-divider")}></div>
 
         {/* Right camera (Player 2) */}
-        <div className="match-cam-wrapper">
+        <div className={cx("match-cam-wrapper")}>
           <PlayerCamera playerName={state.player2?.name} />
         </div>
       </div>
