@@ -200,6 +200,11 @@
   filter: drop-shadow(0 0 8px rgba(46, 213, 115, 0.6));
 }
 
+/* ============ Protected Pick state ============ */
+.song-card-wrapper.protected_pick {
+  filter: drop-shadow(0 0 16px rgba(52, 152, 219, 1)) drop-shadow(0 0 8px rgba(52, 152, 219, 0.8));
+}
+
 /* ============ Playing state (active on MatchOverlay) ============ */
 .song-card-wrapper.playing {
   filter: drop-shadow(0 0 12px rgba(247, 21, 171, 0.8));

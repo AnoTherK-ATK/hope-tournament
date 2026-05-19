@@ -52,7 +52,11 @@ const state = {
   player2: { name: "Player 2", score: 0 },
   players: playersData,
   match: { type: "Quarter Final", bracket: "Upper" },
-  turn: 1, // 1 for P1 ban, 2 for P2 ban, 0 for DONE
+  turn: 1, // 1 for P1 ban/pick, 2 for P2 ban/pick, 0 for DONE
+  totalPicks: 0, // Number of picks allowed before ban phase
+  currentPicks: 0,
+  currentBans: 0,
+  phase: 'ban', // 'pick', 'ban', or 'done'
   currentPlaying: null, // slotId of the song currently being played on MatchOverlay
   revealed: false, // Songs are hidden until admin reveals them
   slots: [
@@ -125,6 +129,9 @@ function randomizeSongs(minLvl, maxLvl, count = 5) {
   }));
 
   state.turn = 1; // Reset turn to Player 1
+  state.currentPicks = 0;
+  state.currentBans = 0;
+  state.phase = state.totalPicks > 0 ? 'pick' : 'ban';
   state.currentPlaying = null;
   state.revealed = false;
   return true;
@@ -135,28 +142,50 @@ function banSlot(slotId, playerId) {
   if (state.turn !== playerId || state.turn === 0) return false;
   
   if (slotId >= 0 && slotId < 5 && state.slots[slotId].song && !state.slots[slotId].action) {
-    state.slots[slotId].action = 'ban';
-    state.slots[slotId].by = playerId;
-    
-    // Switch turn
-    if (state.turn === 1) {
-      state.turn = 2;
-    } else if (state.turn === 2) {
-      state.turn = 0; // Done banning
-      // Auto pick remaining
-      state.slots.forEach(slot => {
-        if (!slot.action && slot.song) {
-          slot.action = 'pick';
-        }
-      });
+    if (state.phase === 'pick') {
+      state.slots[slotId].action = 'protected_pick';
+      state.slots[slotId].by = playerId;
+      state.currentPicks++;
+      
+      if (state.currentPicks >= state.totalPicks) {
+        state.phase = 'ban';
+        state.turn = state.turn === 1 ? 2 : 1;
+      } else {
+        state.turn = state.turn === 1 ? 2 : 1;
+      }
+    } else if (state.phase === 'ban') {
+      state.slots[slotId].action = 'ban';
+      state.slots[slotId].by = playerId;
+      state.currentBans++;
+      
+      if (state.currentBans >= 2) {
+        state.turn = 0; // Done banning
+        state.phase = 'done';
+        // Auto pick remaining
+        state.slots.forEach(slot => {
+          if (!slot.action && slot.song) {
+            slot.action = 'pick';
+          }
+        });
+      } else {
+        state.turn = state.turn === 1 ? 2 : 1;
+      }
     }
     return true;
   }
   return false;
 }
 
+function setTotalPicks(count) {
+  state.totalPicks = count;
+  // If we haven't started interacting yet, update the phase immediately
+  if (state.turn === 1 && state.slots.every(s => !s.action)) {
+    state.phase = count > 0 ? 'pick' : 'ban';
+  }
+}
+
 function setCurrentPlaying(slotId) {
-  if (slotId === null || (slotId >= 0 && slotId < 5 && state.slots[slotId]?.action === 'pick')) {
+  if (slotId === null || (slotId >= 0 && slotId < 5 && (state.slots[slotId]?.action === 'pick' || state.slots[slotId]?.action === 'protected_pick'))) {
     state.currentPlaying = slotId;
   }
 }
@@ -165,6 +194,9 @@ function resetMatch() {
   state.player1.score = 0;
   state.player2.score = 0;
   state.turn = 1;
+  state.currentPicks = 0;
+  state.currentBans = 0;
+  state.phase = state.totalPicks > 0 ? 'pick' : 'ban';
   state.currentPlaying = null;
   state.revealed = false;
   state.slots = state.slots.map(s => ({ id: s.id, song: null, action: null, by: null }));
@@ -172,6 +204,9 @@ function resetMatch() {
 
 function resetBanPick() {
   state.turn = 1;
+  state.currentPicks = 0;
+  state.currentBans = 0;
+  state.phase = state.totalPicks > 0 ? 'pick' : 'ban';
   state.currentPlaying = null;
   state.revealed = false;
   state.slots = state.slots.map(s => ({
@@ -305,5 +340,6 @@ module.exports = {
   revealSongs,
   updateBracketMatch,
   randomizeBracket,
-  setOnStateChange
+  setOnStateChange,
+  setTotalPicks
 };

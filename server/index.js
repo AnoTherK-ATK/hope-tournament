@@ -101,6 +101,11 @@ io.on('connection', (socket) => {
     io.emit('state_updated', stateManager.getState());
   });
 
+  socket.on('set_total_picks', (value) => {
+    stateManager.setTotalPicks(value);
+    io.emit('state_updated', stateManager.getState());
+  });
+
   socket.on('disconnect', () => {
     console.log('Client disconnected:', socket.id);
   });
