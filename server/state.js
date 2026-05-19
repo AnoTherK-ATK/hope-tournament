@@ -104,7 +104,9 @@ function randomizeSongs(minLvl, maxLvl, count = 5) {
   songData.forEach(s => {
     s.sheets.forEach(sheet => {
       const lvl = sheet.internalLevelValue;
-      if (lvl >= minLvl && lvl <= maxLvl && !seenSongs.has(s.songId)) {
+      const isIntl = sheet.regions?.intl === true;
+      
+      if (lvl >= minLvl && lvl <= maxLvl && !seenSongs.has(s.songId) && isIntl) {
         // Only pick difficulties that have an SVG frame: expert, master, remaster
         if (['expert', 'master', 'remaster'].includes(sheet.difficulty)) {
           validPairs.push({ song: s, sheet: sheet });
