@@ -3,6 +3,7 @@ import ControlPanel from './pages/ControlPanel';
 import BanPickOverlay from './pages/BanPickOverlay';
 import MatchOverlay from './pages/MatchOverlay';
 import PlayerUI from './pages/PlayerUI';
+import BracketOverlay from './pages/BracketOverlay';
 import './App.css';
 
 function Home() {
@@ -37,6 +38,12 @@ function Home() {
             <div className="home-card-label">Match Overlay</div>
             <div className="home-card-desc">OBS – Scene thi đấu</div>
           </Link>
+
+          <Link to="/overlay/bracket" className="home-card">
+            <div className="home-card-icon">🏆</div>
+            <div className="home-card-label">Bracket Overlay</div>
+            <div className="home-card-desc">OBS – Scene giải đấu</div>
+          </Link>
         </div>
       </div>
     </div>
@@ -52,6 +59,7 @@ function App() {
         <Route path="/player" element={<PlayerUI />} />
         <Route path="/overlay/ban-pick" element={<BanPickOverlay />} />
         <Route path="/overlay/match" element={<MatchOverlay />} />
+        <Route path="/overlay/bracket" element={<BracketOverlay />} />
       </Routes>
     </Router>
   );

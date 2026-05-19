@@ -645,3 +645,37 @@
   padding: 1px 6px;
   border-radius: 4px;
 }
+
+/* Bracket Management */
+.cp-bracket-section {
+  margin-top: 20px;
+}
+.cp-bracket-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+.cp-bracket-match {
+  background: #2a2a35;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #3a3a4a;
+}
+.cp-bracket-match h4 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #aaa;
+}
+.cp-bracket-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+.cp-bracket-row:last-child {
+  margin-bottom: 0;
+}
+.cp-bracket-row .cp-input {
+  flex: 1;
+}

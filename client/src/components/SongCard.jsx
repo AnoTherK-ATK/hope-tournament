@@ -1,5 +1,16 @@
 import React from 'react';
-import './SongCard.css';
+import styles from './SongCard.module.css';
+
+const cx = (...classes) => {
+  return classes
+    .flat()
+    .filter(Boolean)
+    .join(' ')
+    .split(' ')
+    .filter(Boolean)
+    .map(c => styles[c] || c)
+    .join(' ');
+};
 
 const SERVER = '';
 
@@ -53,56 +64,56 @@ export default function SongCard({ song, sheet, action, className = '', onClick,
 
   return (
     <div
-      className={`song-card-wrapper ${action || ''} ${className}`}
+      className={cx(`song-card-wrapper ${action || ''} ${className}`)}
       onClick={onClick}
       style={style}
     >
       {/* SVG Frame as background */}
-      <div className="song-card-frame">
+      <div className={cx("song-card-frame")}>
         <img
           src={`${SERVER}/resources/design/${svgFile}`}
           alt="frame"
-          className="frame-svg"
+          className={cx("frame-svg")}
           draggable={false}
         />
       </div>
 
       {/* Jacket image - positioned inside the left area of the SVG frame */}
-      <div className="song-card-jacket">
+      <div className={cx("song-card-jacket")}>
         <img
           src={`${SERVER}/resources/img/cover/${song.imageName}`}
           alt={song.title}
-          className="jacket-img"
+          className={cx("jacket-img")}
           draggable={false}
         />
       </div>
 
       {/* Top colored band - type icon + difficulty label */}
-      <div className="song-card-top-band">
+      <div className={cx("song-card-top-band")}>
         <img
           src={`${SERVER}/resources/img/${typeIcon}`}
           alt={type}
-          className="type-icon"
+          className={cx("type-icon")}
           draggable={false}
         />
-        <div className="difficulty-label">
+        <div className={cx("difficulty-label")}>
           {diffLabel}
         </div>
       </div>
 
       {/* Song info - on the white polygon area (below the top band) */}
-      <div className="song-card-info">
+      <div className={cx("song-card-info")}>
         {/* Level */}
-        <div className="level-text" style={{ color: diffColor }}>{level}</div>
+        <div className={cx("level-text")} style={{ color: diffColor }}>{level}</div>
 
         {/* Song title */}
-        <div className="title-text" style={{ color: diffColor }}>{song.title}</div>
+        <div className={cx("title-text")} style={{ color: diffColor }}>{song.title}</div>
       </div>
 
       {/* Banned overlay */}
       {action === 'ban' && (
-        <div className="ban-overlay">
-          <div className="ban-text">BANNED</div>
+        <div className={cx("ban-overlay")}>
+          <div className={cx("ban-text")}>BANNED</div>
         </div>
       )}
     </div>

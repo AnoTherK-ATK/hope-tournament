@@ -1,11 +1,23 @@
 import React from 'react';
-import './MatchHeader.css';
+import styles from './MatchHeader.module.css';
 
-export default function MatchHeader({ match }) {
+const cx = (...classes) => {
+  return classes
+    .flat()
+    .filter(Boolean)
+    .join(' ')
+    .split(' ')
+    .filter(Boolean)
+    .map(c => styles[c] || c)
+    .join(' ');
+};
+
+export default function MatchHeader({ match, className = '' }) {
   return (
-    <div className="match-header">
-      <div className="match-title">{match?.type?.toUpperCase() || 'QUARTER FINALS'}</div>
-      <div className="match-subtitle">{match?.bracket || 'Under'}</div>
+    <div className={`${cx("match-header")} ${className}`}>
+      <div className={cx("match-title")}>{match?.type?.toUpperCase() || 'QUARTER FINALS'}</div>
+      <div className={cx("match-subtitle")}>{match?.bracket || 'Under'}</div>
     </div>
   );
 }
+

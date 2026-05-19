@@ -1,9 +1,4 @@
-body {
-  margin: 0;
-  padding: 0;
-  background: transparent;
-  overflow: hidden;
-}
+
 
 /* ============ Canvas ============ */
 .overlay-canvas {
@@ -59,7 +54,8 @@ body {
   object-fit: contain;
 }
 
-.overlay-canvas .match-header {
+.match-header {
   top: 100px;
   left: 450px;
+  position: absolute;
 }

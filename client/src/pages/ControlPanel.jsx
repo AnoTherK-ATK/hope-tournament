@@ -1,6 +1,17 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { socket } from '../lib/socket';
-import './ControlPanel.css';
+import styles from './ControlPanel.module.css';
+
+const cx = (...classes) => {
+  return classes
+    .flat()
+    .filter(Boolean)
+    .join(' ')
+    .split(' ')
+    .filter(Boolean)
+    .map(c => styles[c] || c)
+    .join(' ');
+};
 
 const SERVER = '';
 
@@ -96,7 +107,7 @@ export default function ControlPanel() {
     return result;
   }, [songSheetPairs, searchText, filterDifficulty, filterType, sortBy, sortDir]);
 
-  if (!state) return <div className="cp-loading">Loading...</div>;
+  if (!state) return <div className={cx("cp-loading")}>Loading...</div>;
 
   const handleUpdatePlayers = (p1, p2) => {
     socket.emit('update_players', { player1: p1, player2: p2 });
@@ -163,55 +174,55 @@ export default function ControlPanel() {
   };
 
   return (
-    <div className="cp-container">
+    <div className={cx("cp-container")}>
       {/* Header */}
-      <header className="cp-header">
-        <h1 className="cp-title">🎮 Admin Control Panel</h1>
-        <div className="cp-header-actions">
+      <header className={cx("cp-header")}>
+        <h1 className={cx("cp-title")}>🎮 Admin Control Panel</h1>
+        <div className={cx("cp-header-actions")}>
           {hasSongs && !state.revealed && (
-            <button className="btn btn-reveal" onClick={() => socket.emit('reveal_songs')}>
+            <button className={cx("btn btn-reveal")} onClick={() => socket.emit('reveal_songs')}>
               👁 Reveal Songs
             </button>
           )}
           {hasSongs && state.revealed && (
-            <span className="cp-revealed-badge">✅ Revealed</span>
+            <span className={cx("cp-revealed-badge")}>✅ Revealed</span>
           )}
           {hasSongs && (
-            <button className="btn btn-warning" onClick={handleResetBanPick}>
+            <button className={cx("btn btn-warning")} onClick={handleResetBanPick}>
               🔄 Reset Ban/Pick
             </button>
           )}
-          <button className="btn btn-danger" onClick={() => socket.emit('reset_match')}>
+          <button className={cx("btn btn-danger")} onClick={() => socket.emit('reset_match')}>
             Reset Match
           </button>
         </div>
       </header>
 
       {/* Top Row: Players + Randomizer */}
-      <div className="cp-row">
+      <div className={cx("cp-row")}>
         {/* PLAYER MANAGEMENT */}
-        <section className="cp-card">
-          <h2 className="cp-card-title">👥 Player Setup</h2>
+        <section className={cx("cp-card")}>
+          <h2 className={cx("cp-card-title")}>👥 Player Setup</h2>
 
-          <div className="cp-players-row" style={{ marginBottom: '1rem' }}>
-            <div className="cp-player-col">
-              <h3 className="cp-player-label">Match Type</h3>
+          <div className={cx("cp-players-row")} style={{ marginBottom: '1rem' }}>
+            <div className={cx("cp-player-col")}>
+              <h3 className={cx("cp-player-label")}>Match Type</h3>
               <select
                 value={state.match?.type || 'Quarter Final'}
                 onChange={(e) => handleUpdateMatchInfo(e.target.value, state.match?.bracket)}
-                className="cp-select"
+                className={cx("cp-select")}
               >
                 <option value="Quarter Finals">Quarter Finals</option>
                 <option value="Semi Finals">Semi Finals</option>
                 <option value="Grand Finals">Grand Finals</option>
               </select>
             </div>
-            <div className="cp-player-col">
-              <h3 className="cp-player-label">Bracket</h3>
+            <div className={cx("cp-player-col")}>
+              <h3 className={cx("cp-player-label")}>Bracket</h3>
               <select
                 value={state.match?.bracket || 'Upper'}
                 onChange={(e) => handleUpdateMatchInfo(state.match?.type, e.target.value)}
-                className="cp-select"
+                className={cx("cp-select")}
               >
                 <option value="Upper">Upper</option>
                 <option value="Under">Under</option>
@@ -219,13 +230,13 @@ export default function ControlPanel() {
             </div>
           </div>
 
-          <div className="cp-players-row">
-            <div className="cp-player-col">
-              <h3 className="cp-player-label p1">Player 1</h3>
+          <div className={cx("cp-players-row")}>
+            <div className={cx("cp-player-col")}>
+              <h3 className={cx("cp-player-label p1")}>Player 1</h3>
               <select
                 value={state.player1.name}
                 onChange={(e) => handleUpdatePlayers(e.target.value, state.player2.name)}
-                className="cp-select"
+                className={cx("cp-select")}
               >
                 <option value={state.player1.name}>{state.player1.name}</option>
                 <optgroup label="Upper">
@@ -235,23 +246,23 @@ export default function ControlPanel() {
                   {state.players?.under?.map(p => <option key={p} value={p}>{p}</option>)}
                 </optgroup>
               </select>
-              <div className="cp-score-row">
+              <div className={cx("cp-score-row")}>
                 <label>Score</label>
                 <input
                   type="number"
                   value={state.player1.score}
                   onChange={(e) => handleUpdateScore(parseInt(e.target.value) || 0, state.player2.score)}
-                  className="cp-input cp-input-score"
+                  className={cx("cp-input cp-input-score")}
                 />
               </div>
             </div>
 
-            <div className="cp-player-col">
-              <h3 className="cp-player-label p2">Player 2</h3>
+            <div className={cx("cp-player-col")}>
+              <h3 className={cx("cp-player-label p2")}>Player 2</h3>
               <select
                 value={state.player2.name}
                 onChange={(e) => handleUpdatePlayers(state.player1.name, e.target.value)}
-                className="cp-select"
+                className={cx("cp-select")}
               >
                 <option value={state.player2.name}>{state.player2.name}</option>
                 <optgroup label="Upper Bracket">
@@ -261,13 +272,13 @@ export default function ControlPanel() {
                   {state.players?.under?.map(p => <option key={p} value={p}>{p}</option>)}
                 </optgroup>
               </select>
-              <div className="cp-score-row">
+              <div className={cx("cp-score-row")}>
                 <label>Score</label>
                 <input
                   type="number"
                   value={state.player2.score}
                   onChange={(e) => handleUpdateScore(state.player1.score, parseInt(e.target.value) || 0)}
-                  className="cp-input cp-input-score"
+                  className={cx("cp-input cp-input-score")}
                 />
               </div>
             </div>
@@ -275,20 +286,20 @@ export default function ControlPanel() {
         </section>
 
         {/* SONG RANDOMIZER */}
-        <section className="cp-card">
-          <h2 className="cp-card-title">🎲 Randomize Songs</h2>
-          <p className="cp-card-desc">Lọc bài hát theo Internal Level, random theo số lượng.</p>
+        <section className={cx("cp-card")}>
+          <h2 className={cx("cp-card-title")}>🎲 Randomize Songs</h2>
+          <p className={cx("cp-card-desc")}>Lọc bài hát theo Internal Level, random theo số lượng.</p>
 
-          <div className="cp-level-row">
-            <div className="cp-level-field">
+          <div className={cx("cp-level-row")}>
+            <div className={cx("cp-level-field")}>
               <label>Min Level</label>
-              <input type="number" step="0.1" value={minLvl} onChange={e => setMinLvl(e.target.value)} className="cp-input" />
+              <input type="number" step="0.1" value={minLvl} onChange={e => setMinLvl(e.target.value)} className={cx("cp-input")} />
             </div>
-            <div className="cp-level-field">
+            <div className={cx("cp-level-field")}>
               <label>Max Level</label>
-              <input type="number" step="0.1" value={maxLvl} onChange={e => setMaxLvl(e.target.value)} className="cp-input" />
+              <input type="number" step="0.1" value={maxLvl} onChange={e => setMaxLvl(e.target.value)} className={cx("cp-input")} />
             </div>
-            <div className="cp-level-field">
+            <div className={cx("cp-level-field")}>
               <label>Số bài</label>
               <input
                 type="number"
@@ -296,55 +307,55 @@ export default function ControlPanel() {
                 max="20"
                 value={songCount}
                 onChange={e => setSongCount(e.target.value)}
-                className="cp-input"
+                className={cx("cp-input")}
               />
             </div>
           </div>
 
-          <button onClick={handleRandomize} className="btn btn-success btn-full">
+          <button onClick={handleRandomize} className={cx("btn btn-success btn-full")}>
             🎵 Randomize {songCount} Songs
           </button>
 
-          <div className="cp-status-bar">
-            <span className="cp-status-label">Turn:</span>
-            <span className={`cp-status-value turn-${state.turn}`}>{turnLabel}</span>
+          <div className={cx("cp-status-bar")}>
+            <span className={cx("cp-status-label")}>Turn:</span>
+            <span className={cx(`cp-status-value turn-${state.turn}`)}>{turnLabel}</span>
           </div>
         </section>
       </div>
 
       {/* Bottom: Song Slots */}
-      <section className="cp-card cp-slots-section">
-        <div className="cp-slots-header">
-          <h2 className="cp-card-title">🎵 Ban / Pick Slots</h2>
-          <button className="btn btn-secondary" onClick={openSongModal}>
+      <section className={cx("cp-card cp-slots-section")}>
+        <div className={cx("cp-slots-header")}>
+          <h2 className={cx("cp-card-title")}>🎵 Ban / Pick Slots</h2>
+          <button className={cx("btn btn-secondary")} onClick={openSongModal}>
             ➕ Add Song
           </button>
         </div>
-        <div className="cp-slots-grid">
+        <div className={cx("cp-slots-grid")}>
           {state.slots.map((slot, idx) => {
             const isPlaying = state.currentPlaying === idx;
             const isPicked = slot.action === 'pick';
             const isBanned = slot.action === 'ban';
 
             return (
-              <div key={idx} className={`cp-slot ${slot.action || ''} ${isPlaying ? 'playing' : ''}`}>
-                <div className="cp-slot-header">Slot {idx + 1}</div>
+              <div key={idx} className={cx(`cp-slot ${slot.action || ''} ${isPlaying ? 'playing' : ''}`)}>
+                <div className={cx("cp-slot-header")}>Slot {idx + 1}</div>
 
                 {slot.song ? (
                   <>
                     <img
                       src={`${SERVER}/resources/img/cover-m/${slot.song.imageName}`}
                       alt={slot.song.title}
-                      className="cp-slot-img"
+                      className={cx("cp-slot-img")}
                     />
-                    <div className="cp-slot-title">{slot.song.title}</div>
-                    <div className="cp-slot-meta">
+                    <div className={cx("cp-slot-title")}>{slot.song.title}</div>
+                    <div className={cx("cp-slot-meta")}>
                       {slot.sheet?.difficulty?.toUpperCase()} · Lv.{slot.sheet?.internalLevel || slot.sheet?.level}
                     </div>
 
                     {/* Action badge */}
                     {slot.action && (
-                      <div className={`cp-slot-badge ${slot.action}`}>
+                      <div className={cx(`cp-slot-badge ${slot.action}`)}>
                         {isBanned ? `BANNED (P${slot.by})` : 'PICKED'}
                       </div>
                     )}
@@ -352,7 +363,7 @@ export default function ControlPanel() {
                     {/* "Set as Playing" button — only for picked songs */}
                     {isPicked && (
                       <button
-                        className={`btn btn-sm ${isPlaying ? 'btn-playing' : 'btn-outline'}`}
+                        className={cx(`btn btn-sm ${isPlaying ? 'btn-playing' : 'btn-outline'}`)}
                         onClick={() => handleSetPlaying(isPlaying ? null : idx)}
                       >
                         {isPlaying ? '🔊 Now Playing' : '▶ Play This'}
@@ -360,7 +371,7 @@ export default function ControlPanel() {
                     )}
                   </>
                 ) : (
-                  <div className="cp-slot-empty">Empty</div>
+                  <div className={cx("cp-slot-empty")}>Empty</div>
                 )}
               </div>
             );
@@ -368,31 +379,81 @@ export default function ControlPanel() {
         </div>
       </section>
 
+      {/* BRACKET MANAGEMENT */}
+      <section className={cx("cp-card cp-bracket-section")}>
+        <div className={cx("cp-slots-header")} style={{ flexWrap: 'wrap', gap: '10px' }}>
+          <h2 className={cx("cp-card-title")}>🏆 Bracket Management</h2>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button className={cx("btn btn-secondary btn-sm")} onClick={() => socket.emit('randomize_bracket', 'upper')}>🎲 Random Upper</button>
+            <button className={cx("btn btn-secondary btn-sm")} onClick={() => socket.emit('randomize_bracket', 'under')}>🎲 Random Under</button>
+            <button className={cx("btn btn-warning btn-sm")} onClick={() => socket.emit('randomize_bracket', 'all')}>🎲 Random All</button>
+          </div>
+        </div>
+        <div className={cx("cp-bracket-grid")}>
+          {state.bracket?.map(match => (
+            <div key={match.id} className={cx("cp-bracket-match")}>
+              <h4>Match {match.id}</h4>
+              <div className={cx("cp-bracket-row")}>
+                <input 
+                  type="text" 
+                  className={cx("cp-input")} 
+                  placeholder="Player 1" 
+                  value={match.p1 || ''}
+                  onChange={(e) => socket.emit('update_bracket_match', { id: match.id, p1: e.target.value })}
+                  readOnly={true}
+                />
+                <button 
+                  className={cx(`btn btn-sm ${match.winner === 'p1' ? 'btn-success' : 'btn-outline'}`)}
+                  onClick={() => socket.emit('update_bracket_match', { id: match.id, winner: match.winner === 'p1' ? null : 'p1' })}
+                >
+                  Win
+                </button>
+              </div>
+              <div className={cx("cp-bracket-row")}>
+                <input 
+                  type="text" 
+                  className={cx("cp-input")} 
+                  placeholder="Player 2" 
+                  value={match.p2 || ''}
+                  onChange={(e) => socket.emit('update_bracket_match', { id: match.id, p2: e.target.value })}
+                />
+                <button 
+                  className={cx(`btn btn-sm ${match.winner === 'p2' ? 'btn-success' : 'btn-outline'}`)}
+                  onClick={() => socket.emit('update_bracket_match', { id: match.id, winner: match.winner === 'p2' ? null : 'p2' })}
+                >
+                  Win
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Song Search Modal */}
       {showSongModal && (
-        <div className="modal-overlay" onClick={() => setShowSongModal(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2 className="modal-title">🔍 Add Song to Slot</h2>
-              <button className="modal-close" onClick={() => setShowSongModal(false)}>✕</button>
+        <div className={cx("modal-overlay")} onClick={() => setShowSongModal(false)}>
+          <div className={cx("modal-content")} onClick={e => e.stopPropagation()}>
+            <div className={cx("modal-header")}>
+              <h2 className={cx("modal-title")}>🔍 Add Song to Slot</h2>
+              <button className={cx("modal-close")} onClick={() => setShowSongModal(false)}>✕</button>
             </div>
 
             {/* Search & Filters */}
-            <div className="modal-controls">
+            <div className={cx("modal-controls")}>
               <input
                 type="text"
-                className="cp-input modal-search"
+                className={cx("cp-input modal-search")}
                 placeholder="Search by title or artist..."
                 value={searchText}
                 onChange={e => setSearchText(e.target.value)}
                 autoFocus
               />
 
-              <div className="modal-filters">
-                <div className="modal-filter-group">
+              <div className={cx("modal-filters")}>
+                <div className={cx("modal-filter-group")}>
                   <label>Difficulty</label>
                   <select
-                    className="cp-select"
+                    className={cx("cp-select")}
                     value={filterDifficulty}
                     onChange={e => setFilterDifficulty(e.target.value)}
                   >
@@ -403,10 +464,10 @@ export default function ControlPanel() {
                   </select>
                 </div>
 
-                <div className="modal-filter-group">
+                <div className={cx("modal-filter-group")}>
                   <label>Type</label>
                   <select
-                    className="cp-select"
+                    className={cx("cp-select")}
                     value={filterType}
                     onChange={e => setFilterType(e.target.value)}
                   >
@@ -416,10 +477,10 @@ export default function ControlPanel() {
                   </select>
                 </div>
 
-                <div className="modal-filter-group">
+                <div className={cx("modal-filter-group")}>
                   <label>Sort by</label>
                   <select
-                    className="cp-select"
+                    className={cx("cp-select")}
                     value={sortBy}
                     onChange={e => setSortBy(e.target.value)}
                   >
@@ -429,46 +490,46 @@ export default function ControlPanel() {
                   </select>
                 </div>
 
-                <button className="btn btn-secondary btn-sort-dir" onClick={toggleSortDir}>
+                <button className={cx("btn btn-secondary btn-sort-dir")} onClick={toggleSortDir}>
                   {sortDir === 'asc' ? '↑ ASC' : '↓ DESC'}
                 </button>
               </div>
             </div>
 
             {/* Results count */}
-            <div className="modal-result-count">
+            <div className={cx("modal-result-count")}>
               {filteredPairs.length} results
             </div>
 
             {/* Song List */}
-            <div className="modal-song-list">
+            <div className={cx("modal-song-list")}>
               {filteredPairs.map((pair, i) => (
                 <div
                   key={`${pair.song.songId}-${pair.sheet.type}-${pair.sheet.difficulty}-${i}`}
-                  className="modal-song-item"
+                  className={cx("modal-song-item")}
                   onClick={() => handleAddSong(pair)}
                 >
                   <img
                     src={`${SERVER}/resources/img/cover-m/${pair.song.imageName}`}
                     alt={pair.song.title}
-                    className="modal-song-cover"
+                    className={cx("modal-song-cover")}
                     loading="lazy"
                   />
-                  <div className="modal-song-info">
-                    <div className="modal-song-title">{pair.song.title}</div>
-                    <div className="modal-song-artist">{pair.song.artist}</div>
+                  <div className={cx("modal-song-info")}>
+                    <div className={cx("modal-song-title")}>{pair.song.title}</div>
+                    <div className={cx("modal-song-artist")}>{pair.song.artist}</div>
                   </div>
-                  <div className="modal-song-meta">
+                  <div className={cx("modal-song-meta")}>
                     <span
-                      className="modal-song-diff"
+                      className={cx("modal-song-diff")}
                       style={{ color: DIFF_COLORS[pair.sheet.difficulty] || '#888' }}
                     >
                       {pair.sheet.difficulty.toUpperCase()}
                     </span>
-                    <span className="modal-song-level">
+                    <span className={cx("modal-song-level")}>
                       Lv.{pair.sheet.internalLevel || pair.sheet.level}
                     </span>
-                    <span className="modal-song-type">
+                    <span className={cx("modal-song-type")}>
                       {pair.sheet.type.toUpperCase()}
                     </span>
                   </div>

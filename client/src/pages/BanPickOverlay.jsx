@@ -2,7 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { socket } from '../lib/socket';
 import SongCard from '../components/SongCard';
 import MatchHeader from '../components/MatchHeader';
-import './BanPickOverlay.css';
+import styles from './BanPickOverlay.module.css';
+
+const cx = (...classes) => {
+  return classes
+    .flat()
+    .filter(Boolean)
+    .join(' ')
+    .split(' ')
+    .filter(Boolean)
+    .map(c => styles[c] || c)
+    .join(' ');
+};
 
 const SERVER = '';
 
@@ -27,22 +38,22 @@ export default function BanPickOverlay() {
   if (!state) return null;
 
   return (
-    <div className="overlay-canvas">
+    <div className={cx("overlay-canvas")}>
       {/* Background image */}
       <img
         src={`${SERVER}/resources/design/background.png`}
         alt="bg"
-        className="overlay-bg"
+        className={cx("overlay-bg")}
         draggable={false}
       />
 
       {/* Match Header */}
-      <MatchHeader match={state.match} className="match-header" />
+      <MatchHeader match={state.match} className={cx("match-header")} />
 
       {/* 5 Song Cards stacked vertically on the left */}
-      <div className="song-cards-column">
+      <div className={cx("song-cards-column")}>
         {state.slots.map((slot, idx) => (
-          <div key={idx} className={`song-card-slot s-${idx}`}>
+          <div key={idx} className={cx(`song-card-slot s-${idx}`)}>
             {slot.song && state.revealed ? (
               <SongCard
                 song={slot.song}
@@ -55,11 +66,11 @@ export default function BanPickOverlay() {
       </div>
 
       {/* Camera Frame (SVG) on the right */}
-      {/* <div className="camera-frame-area">
+      {/* <div className={cx("camera-frame-area")}>
         <img
           src={`${SERVER}/resources/design/camera-frame.svg`}
           alt="camera frame"
-          className="camera-frame-svg"
+          className={cx("camera-frame-svg")}
           draggable={false}
         />
       </div> */}
