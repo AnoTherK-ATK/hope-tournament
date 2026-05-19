@@ -36,17 +36,24 @@ export default function BracketOverlay() {
   if (!state || !state.bracket) return null;
 
   const getMatch = (id) => state.bracket.find(m => m.id === id);
+  const getStatus = (playerName) => state.players?.statuses?.[playerName] || null;
 
   const MatchNode = ({ match, title }) => {
     if (!match) return null;
+    
+    const p1Status = getStatus(match.p1);
+    const p2Status = getStatus(match.p2);
+    
     return (
       <div className={cx("bracket-match")}>
         <div className={cx("match-title")}>{title}</div>
-        <div className={cx(`match-player ${match.winner === 'p1' ? 'winner' : ''} ${match.winner === 'p2' ? 'loser' : ''}`)}>
+        <div className={cx(`match-player ${match.winner === 'p1' ? 'winner' : ''} ${match.winner === 'p2' ? 'loser' : ''} ${p1Status ? 'has-status' : ''}`)}>
           <div className={cx("player-name")}>{match.p1 || 'TBD'}</div>
+          {p1Status && <div className={cx("status-badge")}>{p1Status}</div>}
         </div>
-        <div className={cx(`match-player ${match.winner === 'p2' ? 'winner' : ''} ${match.winner === 'p1' ? 'loser' : ''}`)}>
+        <div className={cx(`match-player ${match.winner === 'p2' ? 'winner' : ''} ${match.winner === 'p1' ? 'loser' : ''} ${p2Status ? 'has-status' : ''}`)}>
           <div className={cx("player-name")}>{match.p2 || 'TBD'}</div>
+          {p2Status && <div className={cx("status-badge")}>{p2Status}</div>}
         </div>
       </div>
     );
@@ -61,7 +68,7 @@ export default function BracketOverlay() {
         draggable={false}
       />
       <div className={cx("bracket-content")}>
-        <h1 className={cx("bracket-header")}>BRACKET</h1>
+        <h1 className={cx("bracket-header")}>{state?.match?.bracket} BRACKET</h1>
         <div className={cx("bracket-grid")}>
           <div className={cx("bracket-col")}>
             <MatchNode match={getMatch(1)} title="Quarter Final 1" />

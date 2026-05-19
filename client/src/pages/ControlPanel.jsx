@@ -159,11 +159,11 @@ export default function ControlPanel() {
     setSortDir(prev => prev === 'asc' ? 'desc' : 'asc');
   };
 
-  const turnLabel = state.turn === 1
-    ? `🔴 Player 1 (${state.player1.name})`
-    : state.turn === 2
-      ? `🔵 Player 2 (${state.player2.name})`
-      : '✅ BAN xong — Sẵn sàng thi đấu';
+  const turnLabel = state.phase === 'pick'
+    ? state.turn === 1 ? `🔴 Player 1 PICK (${state.player1.name})` : `🔵 Player 2 PICK (${state.player2.name})`
+    : state.phase === 'ban'
+      ? state.turn === 1 ? `🔴 Player 1 BAN (${state.player1.name})` : `🔵 Player 2 BAN (${state.player2.name})`
+      : '✅ BAN/PICK xong — Sẵn sàng thi đấu';
 
   const hasSongs = state.slots.some(s => s.song);
 
@@ -311,6 +311,21 @@ export default function ControlPanel() {
               />
             </div>
           </div>
+          
+          <div className={cx("cp-level-row")} style={{ marginBottom: '15px' }}>
+            <div className={cx("cp-level-field")}>
+              <label>Số lượt bảo vệ bài (Pick)</label>
+              <select 
+                value={state.totalPicks || 0}
+                onChange={(e) => socket.emit('set_total_picks', parseInt(e.target.value))}
+                className={cx("cp-select")}
+              >
+                <option value={0}>0 Lượt (Chỉ Ban)</option>
+                <option value={1}>1 Lượt (P1 Pick → P2 Ban → P1 Ban)</option>
+                <option value={2}>2 Lượt (P1 Pick → P2 Pick → P1 Ban → P2 Ban)</option>
+              </select>
+            </div>
+          </div>
 
           <button onClick={handleRandomize} className={cx("btn btn-success btn-full")}>
             🎵 Randomize {songCount} Songs
@@ -356,12 +371,12 @@ export default function ControlPanel() {
                     {/* Action badge */}
                     {slot.action && (
                       <div className={cx(`cp-slot-badge ${slot.action}`)}>
-                        {isBanned ? `BANNED (P${slot.by})` : 'PICKED'}
+                        {isBanned ? `BANNED (P${slot.by})` : slot.action === 'protected_pick' ? `PROTECTED (P${slot.by})` : 'PICKED'}
                       </div>
                     )}
 
                     {/* "Set as Playing" button — only for picked songs */}
-                    {isPicked && (
+                    {(isPicked || slot.action === 'protected_pick') && (
                       <button
                         className={cx(`btn btn-sm ${isPlaying ? 'btn-playing' : 'btn-outline'}`)}
                         onClick={() => handleSetPlaying(isPlaying ? null : idx)}
@@ -392,7 +407,21 @@ export default function ControlPanel() {
         <div className={cx("cp-bracket-grid")}>
           {state.bracket?.map(match => (
             <div key={match.id} className={cx("cp-bracket-match")}>
-              <h4>Match {match.id}</h4>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                <h4 style={{ margin: 0 }}>Match {match.id}</h4>
+                <button 
+                  className={cx("btn btn-reveal btn-sm")} 
+                  onClick={() => {
+                    handleUpdatePlayers(match.p1 || 'Player 1', match.p2 || 'Player 2');
+                    let type = "Quarter Finals";
+                    if (match.id >= 5 && match.id <= 6) type = "Semi Finals";
+                    if (match.id === 7) type = "Grand Finals";
+                    handleUpdateMatchInfo(type, state.match?.bracket);
+                  }}
+                >
+                  ▶ Setup
+                </button>
+              </div>
               <div className={cx("cp-bracket-row")}>
                 <input 
                   type="text" 

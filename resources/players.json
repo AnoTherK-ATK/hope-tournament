@@ -18,5 +18,8 @@
     "Player 14",
     "Player 15",
     "Player 16"
-  ]
+  ],
+  "statuses": {
+    "Player 1": "ADVANCED"
+  }
 }

@@ -40,7 +40,7 @@ export default function MatchOverlay() {
 
   // Use admin-controlled currentPlaying slot
   const playingSlot = state.currentPlaying !== null ? state.slots[state.currentPlaying] : null;
-  const currentSong = playingSlot?.action === 'pick' ? playingSlot : null;
+  const currentSong = (playingSlot?.action === 'pick' || playingSlot?.action === 'protected_pick') ? playingSlot : null;
 
   return (
     <div className={cx("match-overlay-container")}>
