@@ -48,40 +48,23 @@ export default function PlayerUI() {
   const canShowSongs = hasSongs && state.revealed;
 
   return (
-    <div className={cx("player-ui-container")}>
-      {/* Background */}
-      <img
-        src={`${SERVER}/resources/design/background.png`}
-        alt="bg"
-        className={cx("player-ui-bg")}
-        draggable={false}
-      />
+    <>
+      <title>Ban Pick</title>
+      <div className={cx("player-ui-container")}>
+        {/* Background */}
+        <img
+          src={`${SERVER}/resources/design/background.png`}
+          alt="bg"
+          className={cx("player-ui-bg")}
+          draggable={false}
+        />
 
-      
-      {canShowSongs ? (
-        <div className={cx("player-cards-grid")}>
-          {/* Row 1: 2 cards */}
-          <div className={cx("player-cards-row")}>
-            {state.slots.slice(0, 2).map((slot, idx) => (
-              <div key={idx} className={cx("player-card-item")}>
-                {slot.song && (
-                  <SongCard
-                    song={slot.song}
-                    sheet={slot.sheet}
-                    action={slot.action}
-                    onClick={() => !slot.action && state.turn !== 0 && handleBan(idx)}
-                    className={cx(!slot.action && state.turn !== 0 ? 'clickable' : '')}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Row 2: 2 cards */}
-          <div className={cx("player-cards-row")}>
-            {state.slots.slice(2, 4).map((slot, realIdx) => {
-              const idx = realIdx + 2;
-              return (
+        
+        {canShowSongs ? (
+          <div className={cx("player-cards-grid")}>
+            {/* Row 1: 2 cards */}
+            <div className={cx("player-cards-row")}>
+              {state.slots.slice(0, 2).map((slot, idx) => (
                 <div key={idx} className={cx("player-card-item")}>
                   {slot.song && (
                     <SongCard
@@ -93,35 +76,55 @@ export default function PlayerUI() {
                     />
                   )}
                 </div>
-              );
-            })}
-          </div>
+              ))}
+            </div>
 
-          {/* Row 3: 1 card centered */}
-          <div className={cx("player-cards-row center-row")}>
-            {state.slots.slice(4, 5).map((slot) => {
-              const idx = 4;
-              return (
-                <div key={idx} className={cx("player-card-item")}>
-                  {slot.song && (
-                    <SongCard
-                      song={slot.song}
-                      sheet={slot.sheet}
-                      action={slot.action}
-                      onClick={() => !slot.action && state.turn !== 0 && handleBan(idx)}
-                      className={cx(!slot.action && state.turn !== 0 ? 'clickable' : '')}
-                    />
-                  )}
-                </div>
-              );
-            })}
+            {/* Row 2: 2 cards */}
+            <div className={cx("player-cards-row")}>
+              {state.slots.slice(2, 4).map((slot, realIdx) => {
+                const idx = realIdx + 2;
+                return (
+                  <div key={idx} className={cx("player-card-item")}>
+                    {slot.song && (
+                      <SongCard
+                        song={slot.song}
+                        sheet={slot.sheet}
+                        action={slot.action}
+                        onClick={() => !slot.action && state.turn !== 0 && handleBan(idx)}
+                        className={cx(!slot.action && state.turn !== 0 ? 'clickable' : '')}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Row 3: 1 card centered */}
+            <div className={cx("player-cards-row center-row")}>
+              {state.slots.slice(4, 5).map((slot) => {
+                const idx = 4;
+                return (
+                  <div key={idx} className={cx("player-card-item")}>
+                    {slot.song && (
+                      <SongCard
+                        song={slot.song}
+                        sheet={slot.sheet}
+                        action={slot.action}
+                        onClick={() => !slot.action && state.turn !== 0 && handleBan(idx)}
+                        className={cx(!slot.action && state.turn !== 0 ? 'clickable' : '')}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className={cx("waiting-message")}>
-          {hasSongs ? 'Đang chờ Admin reveal bài hát...' : 'Đang chờ Admin random bài hát...'}
-        </div>
-      )}
-    </div>
+        ) : (
+          <div className={cx("waiting-message")}>
+            {hasSongs ? 'Đang chờ Admin reveal bài hát...' : 'Đang chờ Admin random bài hát...'}
+          </div>
+        )}
+      </div>
+    </>
   );
 }

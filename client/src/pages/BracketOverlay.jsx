@@ -60,31 +60,34 @@ export default function BracketOverlay() {
   };
 
   return (
-    <div className={cx("bracket-overlay-container")}>
-      <img
-        src={`${SERVER}/resources/design/background.png`}
-        alt="bg"
-        className={cx("bracket-bg")}
-        draggable={false}
-      />
-      <div className={cx("bracket-content")}>
-        <h1 className={cx("bracket-header")}>{state?.match?.bracket} BRACKET</h1>
-        <div className={cx("bracket-grid")}>
-          <div className={cx("bracket-col")}>
-            <MatchNode match={getMatch(1)} title="Quarter Final 1" />
-            <MatchNode match={getMatch(2)} title="Quarter Final 2" />
-            <MatchNode match={getMatch(3)} title="Quarter Final 3" />
-            <MatchNode match={getMatch(4)} title="Quarter Final 4" />
-          </div>
-          <div className={cx("bracket-col")}>
-            <MatchNode match={getMatch(5)} title="Semi Final 1" />
-            <MatchNode match={getMatch(6)} title="Semi Final 2" />
-          </div>
-          <div className={cx("bracket-col")}>
-            <MatchNode match={getMatch(7)} title="Grand Final" />
+    <>
+      <title>Bracket Overlay</title>
+      <div className={cx("bracket-overlay-container")}>
+        <img
+          src={`${SERVER}/resources/design/background.png`}
+          alt="bg"
+          className={cx("bracket-bg")}
+          draggable={false}
+        />
+        <div className={cx("bracket-content")}>
+          <h1 className={cx("bracket-header")}>{state?.match?.bracket} BRACKET</h1>
+          <div className={cx("bracket-grid")}>
+            <div className={cx("bracket-col")}>
+              <MatchNode match={getMatch(1)} title="Quarter Final 1" />
+              <MatchNode match={getMatch(2)} title="Quarter Final 2" />
+              <MatchNode match={getMatch(3)} title="Quarter Final 3" />
+              <MatchNode match={getMatch(4)} title="Quarter Final 4" />
+            </div>
+            <div className={cx("bracket-col")}>
+              <MatchNode match={getMatch(5)} title="Semi Final 1" />
+              <MatchNode match={getMatch(6)} title="Semi Final 2" />
+            </div>
+            <div className={cx("bracket-col")}>
+              <MatchNode match={getMatch(7)} title="Grand Final" />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

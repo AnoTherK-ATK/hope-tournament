@@ -38,44 +38,47 @@ export default function BanPickOverlay() {
   if (!state) return null;
 
   return (
-    <div className={cx("overlay-canvas")}>
-      {/* Background image */}
-      <img
-        src={`${SERVER}/resources/design/background.png`}
-        alt="bg"
-        className={cx("overlay-bg")}
-        draggable={false}
-      />
+    <>
+      <title>Ban Pick Overlay</title>
+      <div className={cx("overlay-canvas")}>
+        {/* Background image */}
+        <img
+          src={`${SERVER}/resources/design/background.png`}
+          alt="bg"
+          className={cx("overlay-bg")}
+          draggable={false}
+          />
 
-      {/* Match Header */}
-      <MatchHeader match={state.match} className={cx("match-header")} />
+        {/* Match Header */}
+        <MatchHeader match={state.match} className={cx("match-header")} />
 
-      {/* 5 Song Cards stacked vertically on the left */}
-      <div className={cx("song-cards-column")}>
-        {state.slots.map((slot, idx) => (
-          <div key={idx} className={cx(`song-card-slot s-${idx}`)}>
-            {slot.song && state.revealed ? (
-              <SongCard
+        {/* 5 Song Cards stacked vertically on the left */}
+        <div className={cx("song-cards-column")}>
+          {state.slots.map((slot, idx) => (
+            <div key={idx} className={cx(`song-card-slot s-${idx}`)}>
+              {slot.song && state.revealed ? (
+                <SongCard
                 song={slot.song}
                 sheet={slot.sheet}
                 action={slot.action}
-              />
-            ) : null}
-          </div>
-        ))}
-      </div>
+                />
+              ) : null}
+            </div>
+          ))}
+        </div>
 
-      {/* Camera Frame (SVG) on the right */}
-      {/* <div className={cx("camera-frame-area")}>
-        <img
+        {/* Camera Frame (SVG) on the right */}
+        {/* <div className={cx("camera-frame-area")}>
+          <img
           src={`${SERVER}/resources/design/camera-frame.svg`}
           alt="camera frame"
           className={cx("camera-frame-svg")}
           draggable={false}
-        />
-      </div> */}
+          />
+          </div> */}
 
-      
-    </div>
+        
+      </div>
+    </>
   );
 }
