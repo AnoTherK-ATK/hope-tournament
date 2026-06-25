@@ -53,7 +53,7 @@ export default function MatchOverlay() {
       />
 
       {/* Match Header */}
-      <MatchHeader match={state.match} />
+      <MatchHeader match={state.match} className={cx("match-header")} />
 
       {/* Current Song Card (centered, between header and cameras) */}
       {currentSong && currentSong.song && (

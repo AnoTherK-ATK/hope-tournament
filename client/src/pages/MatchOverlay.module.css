@@ -67,3 +67,8 @@
   width: 40px;
   flex-shrink: 0;
 }
+
+.match-header {
+  top: 170px;
+  position: absolute;
+}
