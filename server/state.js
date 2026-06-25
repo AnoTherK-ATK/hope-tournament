@@ -102,11 +102,13 @@ function randomizeSongs(minLvl, maxLvl, count = 5) {
   const seenSongs = new Set();
 
   songData.forEach(s => {
+    const isCirclePlus = (s.version === "CiRCLE PLUS") || (s.version === "CiRCLE PLUS+");
+    const isGotobun = s.title.includes("君だったから");
     s.sheets.forEach(sheet => {
       const lvl = sheet.internalLevelValue;
       const isIntl = sheet.regions?.intl === true;
       
-      if (lvl >= minLvl && lvl <= maxLvl && !seenSongs.has(s.songId) && isIntl) {
+      if (lvl >= minLvl && lvl <= maxLvl && !seenSongs.has(s.songId) && !isCirclePlus && !isGotobun) {
         // Only pick difficulties that have an SVG frame: expert, master, remaster
         if (['expert', 'master', 'remaster'].includes(sheet.difficulty)) {
           validPairs.push({ song: s, sheet: sheet });
