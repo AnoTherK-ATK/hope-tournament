@@ -20,18 +20,18 @@
 /* ============ Song Cards Column (left side) ============ */
 .song-cards-column {
   position: absolute;
-  left: 100px;
-  top: 30px;
-  width: 600px;
+  left: 120px;
+  top: 200px;
+  width: 520px;
   z-index: 5;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
 }
 
 .song-card-slot {
   width: 100%;
-  padding: 5px;
+  padding: 0;
 }
 
 

@@ -104,11 +104,17 @@ function randomizeSongs(minLvl, maxLvl, count = 5) {
   songData.forEach(s => {
     const isCirclePlus = (s.version === "CiRCLE PLUS") || (s.version === "CiRCLE PLUS+");
     const isGotobun = s.title.includes("君だったから");
+    const is7Wonders = s.title.includes("7 Wonders");
+    const isGalaxyBlaster = s.title.includes("Galaxy Blaster");
+    const isXaleidScopiX = s.title.includes("Xaleid◆scopiX");
+    const isRefRain = s.title.includes("Ref:rain (for 7th Heaven)");
+
     s.sheets.forEach(sheet => {
       const lvl = sheet.internalLevelValue;
       const isIntl = sheet.regions?.intl === true;
       
-      if (lvl >= minLvl && lvl <= maxLvl && !seenSongs.has(s.songId) && !isCirclePlus && !isGotobun) {
+      if (lvl >= minLvl && lvl <= maxLvl && !seenSongs.has(s.songId) && !isCirclePlus 
+      && !isGotobun && !is7Wonders && !isGalaxyBlaster && !isXaleidScopiX && !isRefRain) {
         // Only pick difficulties that have an SVG frame: expert, master, remaster
         if (['expert', 'master', 'remaster'].includes(sheet.difficulty)) {
           validPairs.push({ song: s, sheet: sheet });
